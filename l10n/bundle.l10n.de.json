@@ -1,0 +1,15 @@
+{
+  "{0}: Open a workspace folder first.": "{0}: Bitte zuerst einen Workspace-Ordner öffnen.",
+  "{0}: No tasks found.": "{0}: Keine Aufgaben gefunden.",
+  "Select a task to open its location": "Aufgabe auswählen, um die Stelle zu öffnen",
+  "Filter tasks": "Aufgaben filtern",
+  "Text, tag, severity, or file path": "Text, Markierung, Schweregrad oder Dateipfad",
+  "{0}: Scanning workspace tasks...": "{0}: Workspace-Aufgaben werden gesucht...",
+  "1 task": "1 Aufgabe",
+  "{0} tasks": "{0} Aufgaben",
+  "{0} in workspace": "{0} im Workspace",
+  "{0}: Found {1}": "{0}: {1} gefunden",
+  "Filter: {0} ({1})": "Filter: {0} ({1})",
+  "No tasks match filter: {0}": "Keine Aufgaben passen zum Filter: {0}",
+  "{0}: {1}": "{0}: {1}"
+}

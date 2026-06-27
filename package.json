@@ -1,0 +1,357 @@
+{
+  "name": "task-list",
+  "displayName": "hav Task List",
+  "description": "%description%",
+  "version": "0.1.0",
+  "publisher": "havoc",
+  "author": {
+    "name": "René Nicolaus",
+    "email": "extensions@havoc.de",
+    "url": "https://havoc.de"
+  },
+  "pricing": "Free",
+  "license": "MIT",
+  "markdown": "github",
+  "icon": "assets/icon.png",
+  "galleryBanner": {
+    "color": "#202124",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "todo",
+    "task list",
+    "tasks",
+    "task tags",
+    "fixme",
+    "hack",
+    "bug",
+    "note",
+    "diagnostics",
+    "problems",
+    "editor highlights",
+    "tree view",
+    "regex",
+    "workspace"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Havoc7891/hav-task-list"
+  },
+  "bugs": {
+    "url": "https://github.com/Havoc7891/hav-task-list/issues",
+    "email": "extensions@havoc.de"
+  },
+  "homepage": "https://havoc.de/project/havTaskList",
+  "qna": "marketplace",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "l10n": "./l10n",
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "havTaskList.refresh",
+        "title": "%commands.refresh.title%",
+        "category": "%commands.category%",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "havTaskList.goToTask",
+        "title": "%commands.goToTask.title%",
+        "category": "%commands.category%",
+        "icon": "$(three-bars)"
+      },
+      {
+        "command": "havTaskList.groupByFile",
+        "title": "%commands.groupByFile.title%",
+        "category": "%commands.category%",
+        "icon": "$(folder)"
+      },
+      {
+        "command": "havTaskList.groupByTag",
+        "title": "%commands.groupByTag.title%",
+        "category": "%commands.category%",
+        "icon": "$(tag)"
+      },
+      {
+        "command": "havTaskList.showFlatView",
+        "title": "%commands.showFlatView.title%",
+        "category": "%commands.category%",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "havTaskList.filterTree",
+        "title": "%commands.filterTree.title%",
+        "category": "%commands.category%",
+        "icon": "$(filter)"
+      },
+      {
+        "command": "havTaskList.clearTreeFilter",
+        "title": "%commands.clearTreeFilter.title%",
+        "category": "%commands.category%",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "havTaskList.expandTree",
+        "title": "%commands.expandTree.title%",
+        "category": "%commands.category%",
+        "icon": "$(expand-all)"
+      },
+      {
+        "command": "havTaskList.collapseTree",
+        "title": "%commands.collapseTree.title%",
+        "category": "%commands.category%",
+        "icon": "$(collapse-all)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "havTaskList",
+          "title": "hav Task List",
+          "icon": "assets/task-list.svg"
+        }
+      ]
+    },
+    "views": {
+      "havTaskList": [
+        {
+          "id": "havTaskList.tasks",
+          "name": "%views.tasks.name%",
+          "icon": "$(checklist)"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "havTaskList.refresh",
+          "when": "view == havTaskList.tasks",
+          "group": "navigation@1"
+        },
+        {
+          "command": "havTaskList.goToTask",
+          "when": "view == havTaskList.tasks",
+          "group": "navigation@2"
+        },
+        {
+          "command": "havTaskList.groupByFile",
+          "when": "view == havTaskList.tasks && havTaskList.groupBy != file",
+          "group": "navigation@3"
+        },
+        {
+          "command": "havTaskList.groupByTag",
+          "when": "view == havTaskList.tasks && havTaskList.groupBy != tag",
+          "group": "navigation@4"
+        },
+        {
+          "command": "havTaskList.showFlatView",
+          "when": "view == havTaskList.tasks && havTaskList.groupBy != flat",
+          "group": "navigation@5"
+        },
+        {
+          "command": "havTaskList.filterTree",
+          "when": "view == havTaskList.tasks",
+          "group": "navigation@6"
+        },
+        {
+          "command": "havTaskList.clearTreeFilter",
+          "when": "view == havTaskList.tasks && havTaskList.hasFilter",
+          "group": "navigation@7"
+        },
+        {
+          "command": "havTaskList.collapseTree",
+          "when": "view == havTaskList.tasks",
+          "group": "navigation@8"
+        },
+        {
+          "command": "havTaskList.expandTree",
+          "when": "view == havTaskList.tasks",
+          "group": "navigation@9"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "%configuration.title%",
+      "properties": {
+        "havTaskList.rules": {
+          "type": "array",
+          "description": "%configuration.rules.description%",
+          "default": [
+            {
+              "id": "todo",
+              "label": "TODO",
+              "pattern": "(?:^|\\s)(?://|#|<!--|/\\*|\\*|--|;|-)\\s*\\bTODO\\b(?::\\s*|\\s+)(.*)",
+              "severity": "info",
+              "color": "charts.blue",
+              "filePattern": "\\.(js|jsx|ts|tsx|vue|svelte|c|cc|cpp|cxx|h|hpp|hh|hxx|cs|csx|py|rb|php|go|rs|java|kt|kts|swift|m|mm|scala|sh|bash|zsh|fish|ps1|psm1|sql|html|css|scss|less|md|mdx|json|jsonc|yaml|yml|toml|ini|cmake|gradle|dockerfile)$"
+            },
+            {
+              "id": "fixme",
+              "label": "FIXME",
+              "pattern": "(?:^|\\s)(?://|#|<!--|/\\*|\\*|--|;|-)\\s*\\bFIXME\\b(?::\\s*|\\s+)(.*)",
+              "severity": "warning",
+              "color": "charts.yellow",
+              "filePattern": "\\.(js|jsx|ts|tsx|vue|svelte|c|cc|cpp|cxx|h|hpp|hh|hxx|cs|csx|py|rb|php|go|rs|java|kt|kts|swift|m|mm|scala|sh|bash|zsh|fish|ps1|psm1|sql|html|css|scss|less|md|mdx|json|jsonc|yaml|yml|toml|ini|cmake|gradle|dockerfile)$"
+            },
+            {
+              "id": "hack",
+              "label": "HACK",
+              "pattern": "(?:^|\\s)(?://|#|<!--|/\\*|\\*|--|;|-)\\s*\\bHACK\\b(?::\\s*|\\s+)(.*)",
+              "severity": "warning",
+              "color": "charts.orange",
+              "filePattern": "\\.(js|jsx|ts|tsx|vue|svelte|c|cc|cpp|cxx|h|hpp|hh|hxx|cs|csx|py|rb|php|go|rs|java|kt|kts|swift|m|mm|scala|sh|bash|zsh|fish|ps1|psm1|sql|html|css|scss|less|md|mdx|json|jsonc|yaml|yml|toml|ini|cmake|gradle|dockerfile)$"
+            },
+            {
+              "id": "bug",
+              "label": "BUG",
+              "pattern": "(?:^|\\s)(?://|#|<!--|/\\*|\\*|--|;|-)\\s*\\bBUG\\b(?::\\s*|\\s+)(.*)",
+              "severity": "error",
+              "color": "charts.red",
+              "filePattern": "\\.(js|jsx|ts|tsx|vue|svelte|c|cc|cpp|cxx|h|hpp|hh|hxx|cs|csx|py|rb|php|go|rs|java|kt|kts|swift|m|mm|scala|sh|bash|zsh|fish|ps1|psm1|sql|html|css|scss|less|md|mdx|json|jsonc|yaml|yml|toml|ini|cmake|gradle|dockerfile)$"
+            },
+            {
+              "id": "note",
+              "label": "NOTE",
+              "pattern": "(?:^|\\s)(?://|#|<!--|/\\*|\\*|--|;|-)\\s*\\bNOTE\\b(?::\\s*|\\s+)(.*)",
+              "severity": "info",
+              "color": "charts.green",
+              "filePattern": "\\.(js|jsx|ts|tsx|vue|svelte|c|cc|cpp|cxx|h|hpp|hh|hxx|cs|csx|py|rb|php|go|rs|java|kt|kts|swift|m|mm|scala|sh|bash|zsh|fish|ps1|psm1|sql|html|css|scss|less|md|mdx|json|jsonc|yaml|yml|toml|ini|cmake|gradle|dockerfile)$"
+            }
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "pattern": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "off",
+                  "info",
+                  "warning",
+                  "error"
+                ]
+              },
+              "color": {
+                "type": "string",
+                "description": "%configuration.rules.color.description%"
+              },
+              "filePattern": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "pattern",
+              "severity"
+            ]
+          }
+        },
+        "havTaskList.includeGlobs": {
+          "type": "array",
+          "description": "%configuration.includeGlobs.description%",
+          "default": [
+            "**/*"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "havTaskList.excludeGlobs": {
+          "type": "array",
+          "description": "%configuration.excludeGlobs.description%",
+          "default": [
+            "**/.git/**",
+            "**/.hg/**",
+            "**/.svn/**",
+            "**/node_modules/**",
+            "**/bower_components/**",
+            "**/dist/**",
+            "**/out/**",
+            "**/build/**",
+            "**/coverage/**",
+            "**/.next/**",
+            "**/.nuxt/**",
+            "**/.turbo/**"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "havTaskList.maxFileSizeKb": {
+          "type": "number",
+          "default": 512,
+          "description": "%configuration.maxFileSizeKb.description%"
+        },
+        "havTaskList.showDiagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "%configuration.showDiagnostics.description%"
+        },
+        "havTaskList.showEditorHighlights": {
+          "type": "boolean",
+          "default": true,
+          "description": "%configuration.showEditorHighlights.description%"
+        },
+        "havTaskList.groupBy": {
+          "type": "string",
+          "enum": [
+            "file",
+            "tag",
+            "flat"
+          ],
+          "enumDescriptions": [
+            "%configuration.groupBy.file%",
+            "%configuration.groupBy.tag%",
+            "%configuration.groupBy.flat%"
+          ],
+          "default": "file",
+          "description": "%configuration.groupBy.description%"
+        },
+        "havTaskList.autoScan": {
+          "type": "boolean",
+          "default": true,
+          "description": "%configuration.autoScan.description%"
+        },
+        "havTaskList.debounceMs": {
+          "type": "number",
+          "default": 250,
+          "description": "%configuration.debounceMs.description%"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "publish": "vsce publish",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.9.3",
+    "@vscode/vsce": "^3.9.2"
+  }
+}
